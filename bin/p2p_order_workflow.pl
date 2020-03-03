@@ -9,11 +9,11 @@ use Digest::MD5 qw(md5_hex);
 
 my ($app_id, $api_token);
 
-GetOptions ("id=s" => \$app_id,
+GetOptions ("app_id=s" => \$app_id,
             "token=s"   => \$api_token);
 
 
-die "One of the argument is missed: id, token" unless $app_id || $api_token;
+die "One of the argument is missed: app_id, token" unless $app_id || $api_token;
 
 my $api = WebService::SendBird->new(app_id => $app_id, api_token => $api_token);
 
