@@ -180,7 +180,6 @@ sub request {
             uc($method) eq 'GET' ? (form => $params) : (json => $params),
         )
     );
-    Carp::croak('Fail to make request to SB API') if $resp->result->code !~ /^2\d+/;
 
     my $data;
     eval {

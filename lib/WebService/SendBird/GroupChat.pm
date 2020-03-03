@@ -171,6 +171,11 @@ sub update {
     return $self
 }
 
+sub get_messages {
+    my ($self, %params) = @_;
+
+    return $self->api_client->request(GET => 'group_channels/' . $self->channel_url . '/messages', \%params);
+}
 
 sub send_message {
     my ($self, %params) = @_;

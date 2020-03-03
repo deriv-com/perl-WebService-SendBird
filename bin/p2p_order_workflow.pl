@@ -73,4 +73,3 @@ $chat->send_admin_message(
 
 print '3 notifications were added to channel ', $chat->channel_url, "\n";
 print "-----------------\n";
-
