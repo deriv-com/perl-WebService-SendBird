@@ -5,6 +5,7 @@ use warnings;
 
 use Carp;
 use WebService::SendBird::User;
+use WebService::SendBird::Message;
 
 =head1 NAME
 
@@ -168,6 +169,21 @@ sub update {
     $self->{$_} = $res->{$_} for qw(OPTIONAL_FIELDS);
 
     return $self
+}
+
+
+sub send_message {
+    my ($self, %params) = @_;
+
+    my $res = $self->api_client->request(POST => 'group_channels/' . $self->channel_url . '/messages', \%params);
+
+    return WebService::SendBird::Message->new(%$res, api_client => $self->api_client);
+}
+
+sub send_admin_message {
+    my ($self, %params) = @_;
+
+    return $self->send_message(%params, message_type => 'ADMM');
 }
 
 1;
