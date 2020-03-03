@@ -124,7 +124,10 @@ sub update {
 
     my $res = $self->api_client->request(PUT => 'users/' . $self->user_id, \%params);
 
-    $self->{$_} = $res->{$_} for qw(OPTIONAL_FIELDS);
+    for my $field ( OPTIONAL_FIELDS ) {
+        next unless exists $res->{$field};
+        $self->{$field} = $res->{$field};
+    }
 
     return $self;
 }
