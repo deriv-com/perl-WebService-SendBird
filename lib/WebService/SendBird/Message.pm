@@ -46,7 +46,6 @@ use constant OPTIONAL_FIELDS => qw(
     dedup_id
     user_id
     message
-    send_push
     mark_as_read
     file
     url
