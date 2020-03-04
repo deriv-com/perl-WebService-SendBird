@@ -174,7 +174,14 @@ sub update {
 sub get_messages {
     my ($self, %params) = @_;
 
-    return $self->api_client->request(GET => 'group_channels/' . $self->channel_url . '/messages', \%params);
+    my $res = $self->api_client->request(GET => 'group_channels/' . $self->channel_url . '/messages', \%params);
+
+    $res->{messages} //=  [];
+
+    $_ = WebService::SendBird::Message->new(%$_, api_client => $self->api_client) for @{ $res->{messages} };
+
+    return $res->{messages};
+
 }
 
 sub send_message {

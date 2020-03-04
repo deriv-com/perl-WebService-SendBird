@@ -6,6 +6,7 @@ use warnings;
 use Carp;
 use JSON::PP;
 
+use WebService::SendBird::User;
 =head1 NAME
 
 WebService::SendBird::Message - Base class for SendBird Message
@@ -54,6 +55,8 @@ use constant OPTIONAL_FIELDS => qw(
     file_type
     thumbnails
     require_auth
+    user
+    mentioned_users
 );
 
 {
@@ -84,6 +87,14 @@ sub new {
     $self->{$_} = delete $params{$_} or Carp::croak "$_ is missed" for (REQUIRED_FIELDS);
 
     $self->{$_} = delete $params{$_} for (OPTIONAL_FIELDS);
+
+    if ( $self->{user} ) {
+        $self->{user} = WebService::SendBird::User->new(%{ $self->{user} }, api_client => $self->{api_client});
+    }
+
+    $self->{mentioned_users} //= [];
+    my @obj_mentions = map { WebService::SendBird::User->new(%$_, api_client => $self->{api_client}) }  @{$self->{mentioned_users}};
+    $self->{mentioned_users} = \@obj_mentions;
 
     return bless $self, $cls;
 }
