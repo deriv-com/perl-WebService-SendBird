@@ -177,6 +177,8 @@ sub get_messages {
     my $res = $self->api_client->request(GET => 'group_channels/' . $self->channel_url . '/messages', \%params);
 
     $res->{messages} //=  [];
+    use Data::Dumper;
+    warn Dumper $res->{messages};
 
     $_ = WebService::SendBird::Message->new(%$_, api_client => $self->api_client) for @{ $res->{messages} };
 
