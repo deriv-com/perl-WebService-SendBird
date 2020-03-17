@@ -1,4 +1,4 @@
-package WebService::SendBird::User;
+package WebService::SendBird::Message;
 
 use strict;
 use warnings;
@@ -6,9 +6,10 @@ use warnings;
 use Carp;
 use JSON::PP;
 
+use WebService::SendBird::User;
 =head1 NAME
 
-WebService::SendBird::User - SendBird User
+WebService::SendBird::Message - Base class for SendBird Message
 
 =head1 SYNOPSIS
 
@@ -31,20 +32,31 @@ Class for SendBird User. Information about structure could be found at L<API Doc
 
 use constant REQUIRED_FIELDS => qw(
     api_client
-    user_id
+    type
 );
 
 use constant OPTIONAL_FIELDS => qw(
-    phone_number
-    has_ever_logged_in
-    session_tokens
-    access_token
-    discovery_keys
-    is_online
-    last_seen_at
-    nickname
-    profile_url
-    metadata
+    custom_type
+    data
+    send_push
+    mention_type
+    mentioned_user_ids
+    is_silent
+    sorted_metaarray
+    created_at
+    dedup_id
+    user_id
+    message
+    mark_as_read
+    file
+    url
+    file_name
+    file_size
+    file_type
+    thumbnails
+    require_auth
+    user
+    mentioned_users
 );
 
 {
@@ -75,6 +87,14 @@ sub new {
     $self->{$_} = delete $params{$_} or Carp::croak "$_ is missed" for (REQUIRED_FIELDS);
 
     $self->{$_} = delete $params{$_} for (OPTIONAL_FIELDS);
+
+    if ( $self->{user} ) {
+        $self->{user} = WebService::SendBird::User->new(%{ $self->{user} }, api_client => $self->{api_client});
+    }
+
+    $self->{mentioned_users} //= [];
+    my @obj_mentions = map { WebService::SendBird::User->new(%$_, api_client => $self->{api_client}) }  @{$self->{mentioned_users}};
+    $self->{mentioned_users} = \@obj_mentions;
 
     return bless $self, $cls;
 }
@@ -110,44 +130,5 @@ sub new {
 =back
 
 =cut
-
-=head2 update
-
-Updates the user at SendBird API
-
-Information about parameters could be found at L<API Documentation|https://docs.sendbird.com/platform/user#3_update_a_user>
-
-=cut
-
-sub update {
-    my ($self, %params) = @_;
-
-    my $res = $self->api_client->request(PUT => 'users/' . $self->user_id, \%params);
-
-    for my $field ( OPTIONAL_FIELDS ) {
-        next unless exists $res->{$field};
-        $self->{$field} = $res->{$field};
-    }
-
-    return $self;
-}
-
-=head2 issue_session_token
-
-Issues new session token and returns hash ref with token and expiration time of this token.
-
-=cut
-
-sub issue_session_token {
-    my ($self) = @_;
-
-    $self->update(issue_session_token => $JSON::PP::true);
-
-    my $tokens = $self->session_tokens // [];
-
-    my ($latest_token) = sort { $b->{expires_at} <=> $a->{expires_at} } @$tokens;
-
-    return $latest_token;
-}
 
 1;
