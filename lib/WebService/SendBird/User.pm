@@ -124,7 +124,7 @@ sub update {
 
     my $res = $self->api_client->request(PUT => 'users/' . $self->user_id, \%params);
 
-    $self->{$_} = $res->{$_} for qw(OPTIONAL_FIELDS);
+    $self->{$_} = $res->{$_} for (OPTIONAL_FIELDS);
 
     return $self;
 }
