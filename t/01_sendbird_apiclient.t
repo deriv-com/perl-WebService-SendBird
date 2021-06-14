@@ -306,4 +306,64 @@ subtest 'View Group Chat' => sub {
     is_deeply($request, $expected_request, 'Send expected request');
 };
 
+subtest 'Freeze Group Chat' => sub {
+    
+    my $api = WebService::SendBird->new(
+        api_token => 'TestToken',
+        app_id => 'TestAppID',
+    );
+
+    my $channel_url = 'TestChan';  
+    
+    $api = Test::MockObject::Extends->new($api);
+    my $request;
+    $api->mock(request => sub {
+        my ($api, $method, $path, $params) = @_;
+
+        $request = {
+            method => $method,
+            path => $path,
+            params => $params,
+        };
+
+        return +{
+            channel_url => $channel_url,
+            freeze     => $params->{freeze},
+        };
+    });
+    
+    my $group_chat = $api->view_group_chat(
+        channel_url => $channel_url,
+    );
+    
+    is_deeply $group_chat->set_freeze(1)->freeze, $JSON::PP::true, 'set freeze';
+
+    is_deeply(
+        $request,
+        {
+            method => 'PUT',
+            path =>  "group_channels/$channel_url/freeze",
+            params => { 
+              freeze => $JSON::PP::true
+            },
+        },
+        'expected request'
+    );
+
+    is_deeply $group_chat->set_freeze(0)->freeze, $JSON::PP::false, 'unset freeze';
+
+    is_deeply(
+        $request,
+        {
+            method => 'PUT',
+            path =>  "group_channels/$channel_url/freeze",
+            params => { 
+              freeze => $JSON::PP::false
+            },
+        },
+        'expected request'
+    );
+    
+};
+
 done_testing()

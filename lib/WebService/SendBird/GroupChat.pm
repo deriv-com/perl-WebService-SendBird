@@ -170,4 +170,24 @@ sub update {
     return $self
 }
 
+=head2 set_freeze
+
+Freeze or unfreeze the channel.
+
+See L<https://sendbird.com/docs/chat/v3/platform-api/guides/group-channel#2-freeze-a-channel>.
+
+=cut
+
+sub set_freeze {
+    my ($self, $freeze) = @_;
+    
+    $freeze = $freeze ? \1 : \0;
+
+    my $res = $self->api_client->request(PUT => 'group_channels/' . $self->channel_url. '/freeze', { freeze => $freeze } );
+
+    $self->{freeze} = $res->{freeze};
+
+    return $self
+}
+
 1;
