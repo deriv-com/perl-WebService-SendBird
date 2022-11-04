@@ -8,7 +8,7 @@ use Test::MockObject::Extends;
 
 use WebService::SendBird;
 
-use JSON::PP;
+use JSON::MaybeXS ();
 
 subtest 'Creating API client' => sub {
     my @tests = ([{api_token => 1}, qr/^Missing required argument: app_id or api_url/], [{app_id => 1}, qr/^Missing required argument: api_token/],);
@@ -305,7 +305,7 @@ subtest 'View Group Chat' => sub {
 
     my $group_chat = $api->view_group_chat(
         channel_url => $channel_url,
-        show_member => $JSON::PP::true,
+        show_member => JSON::MaybeXS::true,
     );
 
     isa_ok($group_chat, 'WebService::SendBird::GroupChat');
@@ -314,7 +314,7 @@ subtest 'View Group Chat' => sub {
         method => 'GET',
         path   => "group_channels/$channel_url",
         params => {
-            show_member => $JSON::PP::true,
+            show_member => JSON::MaybeXS::true,
         },
     };
 
@@ -352,27 +352,25 @@ subtest 'Freeze Group Chat' => sub {
         channel_url => $channel_url,
     );
 
-   my $v =  $group_chat->set_freeze(1)->freeze;
-   diag("v is $v" . explain($v));
-    is_deeply $v, $JSON::PP::true, 'set freeze';
+    is_deeply $group_chat->set_freeze(1)->freeze, JSON::MaybeXS::true, 'set freeze';
     is_deeply(
         $request,
         {
             method => 'PUT',
             path   => "group_channels/$channel_url/freeze",
-            params => {freeze => $JSON::PP::true},
+            params => {freeze => JSON::MaybeXS::true},
         },
         'expected request'
     );
 
-    is_deeply $group_chat->set_freeze(0)->freeze, $JSON::PP::false, 'unset freeze';
+    is_deeply $group_chat->set_freeze(0)->freeze, JSON::MaybeXS::false, 'unset freeze';
 
     is_deeply(
         $request,
         {
             method => 'PUT',
             path   => "group_channels/$channel_url/freeze",
-            params => {freeze => $JSON::PP::false},
+            params => {freeze => JSON::MaybeXS::false},
         },
         'expected request'
     );
