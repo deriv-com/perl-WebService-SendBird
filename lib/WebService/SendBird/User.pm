@@ -6,6 +6,8 @@ use warnings;
 use Carp;
 use JSON::MaybeXS;
 
+## VERSION
+
 =head1 NAME
 
 WebService::SendBird::User - SendBird User

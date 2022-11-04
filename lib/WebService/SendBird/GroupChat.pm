@@ -7,6 +7,8 @@ use Carp;
 use JSON::MaybeXS ();
 use WebService::SendBird::User;
 
+## VERSION
+
 =head1 NAME
 
 WebService::SendBird::GroupChat - SendBird Group Chat
