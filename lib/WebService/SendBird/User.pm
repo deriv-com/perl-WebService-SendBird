@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Carp;
-use JSON::PP;
+use JSON::MaybeXS;
 
 =head1 NAME
 
@@ -138,7 +138,7 @@ Issues new session token and returns hash ref with token and expiration time of 
 sub issue_session_token {
     my ($self) = @_;
 
-    $self->update(issue_session_token => $JSON::PP::true);
+    $self->update(issue_session_token => JSON::MaybeXS::true);
 
     my $tokens = $self->session_tokens // [];
 
