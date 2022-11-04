@@ -95,7 +95,7 @@ Returns Application ID.
 
 =cut
 
-sub app_id { shift->{app_id} }
+sub app_id {return shift->{app_id} }
 
 =head2 api_token
 
@@ -103,7 +103,7 @@ Returns API Token
 
 =cut
 
-sub api_token { shift->{api_token} }
+sub api_token {return shift->{api_token} }
 
 =head2 api_url
 
@@ -125,7 +125,7 @@ Return http request timeout value.
 
 =cut
 
-sub timeout { shift->{timeout} || DEFAULT_REQUEST_TIMEOUT }
+sub timeout {return shift->{timeout} || DEFAULT_REQUEST_TIMEOUT }
 
 =head2 ua
 
