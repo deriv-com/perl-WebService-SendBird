@@ -341,7 +341,7 @@ subtest 'Freeze Group Chat' => sub {
                 path   => $path,
                 params => $params,
             };
-
+		print STDERR "freeze in mock request is $params->{freeze}\n";
             return +{
                 channel_url => $channel_url,
                 freeze      => $params->{freeze},
