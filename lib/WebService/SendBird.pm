@@ -11,7 +11,7 @@ use WebService::SendBird::GroupChat;
 
 use Carp qw();
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 # ABSTRACT: client to work with SendBird API
 
