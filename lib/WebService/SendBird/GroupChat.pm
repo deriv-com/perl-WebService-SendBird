@@ -189,7 +189,6 @@ sub set_freeze {
     my $res = $self->api_client->request(PUT => 'group_channels/' . $self->channel_url. '/freeze', { freeze => $freeze } );
 
     $self->{freeze} = $res->{freeze};
-	print STDERR "freeze in set_freeze is $res->{freeze}\n";
     return $self
 }
 
