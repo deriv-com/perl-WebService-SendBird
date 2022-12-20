@@ -2,6 +2,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    remove debug line
 
 0.001     2022-11-13 08:15:13+00:00 UTC
     Initial release.
