@@ -12,10 +12,10 @@ my %WriteMakefileArgs = (
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "7.64"
   },
-  "DISTNAME" => "WebSerivce-SendBird",
+  "DISTNAME" => "WebService-SendBird",
   "LICENSE" => "perl",
   "MIN_PERL_VERSION" => "5.006",
-  "NAME" => "WebSerivce::SendBird",
+  "NAME" => "WebService::SendBird",
   "PREREQ_PM" => {
     "Carp" => 0,
     "JSON::MaybeXS" => 0,
